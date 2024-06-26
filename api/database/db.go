@@ -17,7 +17,6 @@ func ConnectDb() error {
 	if err != nil {
 		return err
 	}
-
 	log.Println("Connected to Database!")
 
 	// Migrate the schema
