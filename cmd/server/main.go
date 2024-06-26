@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// start server
 func main() {
 	r := gin.Default()
 	r.GET("/", func(c *gin.Context) {
