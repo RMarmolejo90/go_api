@@ -7,7 +7,7 @@ type Candle struct {
 	color           string  // color of the candle
 	price           float32 // price in US dollars
 	weight          float32 // product weight in ounces
-	ID              uint    // product identifier - Primary Key
+	ID              uint    `gorm:"primary key"` // product identifier - Primary Key
 	quantityInStock uint16  // the quantity in inventory
 	soldOut         bool    // product is sold out
 }
