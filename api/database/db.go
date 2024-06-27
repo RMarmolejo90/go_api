@@ -17,7 +17,7 @@ func ConnectDb() error {
 	if err != nil {
 		return err
 	}
-	log.Println("Connected to Database!")
+	log.Printf("\n \n \t*****  Connected to Database!  *****\n\t____________________________________ \n\n")
 
 	// Migrate the schema
 	// Need to add all models to the migrate function after created
