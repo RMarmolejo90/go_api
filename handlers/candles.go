@@ -16,10 +16,12 @@ func CreateCandle(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	// save candle to the database
 	if result := database.DB.Create(&candle); result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 		return
 	}
+	// return candle to client
 	c.JSON(http.StatusOK, candle)
 }
 
@@ -27,10 +29,12 @@ func GetCandle(c *gin.Context) {
 	id := c.Param("id")
 	var candle models.Candle
 
+	// get candle from database
 	if err := database.DB.First(&candle, id); err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Candle Not Found"})
 		return
 	}
+	// return candle
 	c.JSON(http.StatusOK, candle)
 }
 
