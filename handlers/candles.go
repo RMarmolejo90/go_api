@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/RMarmolejo90/go_api/api/database"
 	"github.com/RMarmolejo90/go_api/api/models"
