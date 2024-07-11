@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/RMarmolejo90/go_api/api/database"
 	"github.com/RMarmolejo90/go_api/api/models"
@@ -23,8 +24,16 @@ func CreateCandle(c *gin.Context) {
 }
 
 func GetCandle(c *gin.Context) {
+	id := c.Param("id")
+	var candle models.Candle
 
+	if err := database.DB.First(&candle, id); err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Candle Not Found"})
+		return
+	}
+	c.JSON(http.StatusOK, candle)
 }
+
 func UpdateCandle(c *gin.Context) {
 
 }
