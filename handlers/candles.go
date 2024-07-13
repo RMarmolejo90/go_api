@@ -11,7 +11,7 @@ import (
 func CreateCandle(c *gin.Context) {
 	// bind json data to the model
 	var candle models.Candle
-	if err := c.BindJSON(&candle); err != nil {
+	if err := c.ShouldBindJSON(&candle); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -38,7 +38,15 @@ func GetCandle(c *gin.Context) {
 }
 
 func UpdateCandle(c *gin.Context) {
+	id := c.Param("id")
+	var candle models.Candle
 
+	// bind data
+	if err := c.ShouldBindJSON(&candle); err.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	// update the candle
+	if result := database.DB.update
 }
 func DeleteCandle(c *gin.Context) {
 

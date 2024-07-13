@@ -65,16 +65,20 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 
-	// update the user data
+	// Prevent changing of email and ID
+	updatedUser.ID = user.ID
+	updatedUser.Email = user.Email
+
+	// Update the user data
 	user.FirstName = updatedUser.FirstName
 	user.LastName = updatedUser.LastName
-	user.Email = updatedUser.Email
 
 	// save to the database
 	if result := database.DB.Save(&user); result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 		return
 	}
+
 	// success
 	log.Printf("updated user %+v", user)
 	c.JSON(http.StatusOK, user)
