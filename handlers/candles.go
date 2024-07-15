@@ -6,6 +6,7 @@ import (
 	"github.com/RMarmolejo90/go_api/api/database"
 	"github.com/RMarmolejo90/go_api/api/models"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func CreateCandle(c *gin.Context) {
@@ -40,7 +41,7 @@ func GetCandle(c *gin.Context) {
 func UpdateCandle(c *gin.Context) {
 	idStr := c.Param("id")
 	var candle models.Candle
-	
+
 	// convert id to an integer for gorm query
 	id, err := strconv.Atoi(idStr); 
 
@@ -49,7 +50,15 @@ func UpdateCandle(c *gin.Context) {
 	}
 
 	// find candle by ID
-	
+	if result := database.DB.First(&candle, id); result.Error != nil {
+		if result.Error == gorm.ErrRecordNotFound { 
+			c.JSON(http.StatusNotFound, gin.H{"error":"Candle Not Found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		}
+		return
+	}
+
 	// bind data
 	if err := c.ShouldBindJSON(&candle); err.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
