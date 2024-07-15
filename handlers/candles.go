@@ -43,16 +43,16 @@ func UpdateCandle(c *gin.Context) {
 	var candle models.Candle
 
 	// convert id to an integer for gorm query
-	id, err := strconv.Atoi(idStr); 
+	id, err := strconv.Atoi(idStr)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error":err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
 	// find candle by ID
 	if result := database.DB.First(&candle, id); result.Error != nil {
-		if result.Error == gorm.ErrRecordNotFound { 
-			c.JSON(http.StatusNotFound, gin.H{"error":"Candle Not Found"})
+		if result.Error == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Candle Not Found"})
 		} else {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 		}
@@ -60,11 +60,66 @@ func UpdateCandle(c *gin.Context) {
 	}
 
 	// bind data
-	if err := c.ShouldBindJSON(&candle); err.Error != nil {
+	var updatedCandle models.Candle
+	if err := c.ShouldBindJSON(&updatedCandle); err.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
+
 	// update the candle
-	if result := database.DB.Save()
+	if result := database.DB.Save(&candle); result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	
+func UpdateUser(c *gin.Context) {
+	var user models.User
+	idStr := c.Param("id")
+
+	//convert id to integer
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"Error": "Invalid user ID"})
+		return
+	}
+
+	// Find user by ID
+	if result := database.DB.First(&user, id); result.Error != nil {
+		if result.Error == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+		}
+		return
+	}
+
+	// bind the json data to the model
+	var updatedUser models.User
+	if err := c.ShouldBindJSON(&updatedUser); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Prevent changing of email and ID
+	updatedUser.ID = user.ID
+	updatedUser.Email = user.Email
+
+	// Update the user data
+	user.FirstName = updatedUser.FirstName
+	user.LastName = updatedUser.LastName
+
+	// save to the database
+	if result := database.DB.Save(&user); result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	// success
+	log.Printf("Updated Candle %+v", candle)
+	c.JSON(http.StatusOK, candle)
+}
+
 }
 func DeleteCandle(c *gin.Context) {
 
