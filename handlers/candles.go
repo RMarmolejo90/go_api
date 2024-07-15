@@ -1,14 +1,16 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
+
+	"log/slog"
 
 	"github.com/RMarmolejo90/go_api/database"
 	"github.com/RMarmolejo90/go_api/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"log/slog"
 )
 
 // CreateCandle handles the creation of a new candle in the database
