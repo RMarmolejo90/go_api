@@ -81,4 +81,26 @@ func UpdateCandle(c *gin.Context) {
 
 func DeleteCandle(c *gin.Context) {
 
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+
+	// convert id to an integer for gorm query
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// delete candle
+	if result := database.DB.Delete(&models.Candle{}, id); result.Error != nil {
+		if result.Error == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Candle Not Found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		}
+		return
+	}
+
+	// success response
+	log.Print("Successfully Deleted")
+	c.JSON(http.StatusOK, gin.H{"message": "Successfully Deleted"})
 }
