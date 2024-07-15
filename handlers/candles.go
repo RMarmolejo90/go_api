@@ -38,15 +38,24 @@ func GetCandle(c *gin.Context) {
 }
 
 func UpdateCandle(c *gin.Context) {
-	id := c.Param("id")
+	idStr := c.Param("id")
 	var candle models.Candle
+	
+	// convert id to an integer for gorm query
+	id, err := strconv.Atoi(idStr); 
 
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error":err.Error()})
+	}
+
+	// find candle by ID
+	
 	// bind data
 	if err := c.ShouldBindJSON(&candle); err.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 	// update the candle
-	if result := database.DB.update
+	if result := database.DB.Save()
 }
 func DeleteCandle(c *gin.Context) {
 

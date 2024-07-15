@@ -41,7 +41,7 @@ func UpdateUser(c *gin.Context) {
 	var user models.User
 	idStr := c.Param("id")
 
-	//convert id to integer
+	//convert id to integer for Gorm Query
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"Error": "Invalid user ID"})
