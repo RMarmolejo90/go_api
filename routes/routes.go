@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/RMarmolejo90/go_api/api/handlers"
+	"github.com/RMarmolejo90/go_api/handlers"
 	"github.com/gin-gonic/gin"
 )
 

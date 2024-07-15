@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/RMarmolejo90/go_api/api/database"
-	"github.com/RMarmolejo90/go_api/api/routes"
+	"github.com/RMarmolejo90/go_api/database"
+	"github.com/RMarmolejo90/go_api/routes"
 	"github.com/gin-gonic/gin"
 )
 

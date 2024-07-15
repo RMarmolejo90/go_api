@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/RMarmolejo90/go_api/api/database"
-	"github.com/RMarmolejo90/go_api/api/models"
+	"github.com/RMarmolejo90/go_api/database"
+	"github.com/RMarmolejo90/go_api/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -63,7 +63,7 @@ func UpdateCandle(c *gin.Context) {
 
 	// bind data
 	var updatedCandle models.Candle
-	if err := c.ShouldBindJSON(&updatedCandle); err.Error != nil {
+	if err := c.ShouldBindJSON(&updatedCandle); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
